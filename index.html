@@ -1,10 +1,19 @@
-<!DOCTYPE HTML>
-<html lang="en">
-	<head>
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script src="js/main.js"></script>
-	</head>
-	<body>
-		
-	</body>
+<html>
+<head>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzngPClA-xOQCUvW3Kc1OWLKFvR4i9h5w"></script>
+<script type="text/javascript" src="heatmap.min.js"></script>
+<script type="text/javascript" src="heatmap.js"></script>
+<script type="text/javascript" src="papaparse.min.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+  <body>
+  <form>
+  <input type="file" id="fileInput" onchange="handleFile();"/>
+  </form>
+	<div id="map-canvas"></div>
+  </body>
 </html>
+
+
