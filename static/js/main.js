@@ -3,7 +3,7 @@ var map;
 var minSavings = 0;
 var info;
 
-/* update map values on slider change*/
+/* update map values on slider change */
 function updateSlider() {
 	if(typeof info !== 'undefined') { //if file has not been uploaded yet
 		var val = $("#slider").val();
@@ -38,25 +38,37 @@ function handleFile() {
 
 /* update heatmap with new file upload */
 function updateMap(array){
-	var m = 0;
+	var max = 0;
+	var min = 1000000;
 	for(var i = 0; i < array.length; i ++){
 		array[i].savings = Number(array[i].savings.replace(/[^0-9\.]+/g,"")); //clean monetary values
 		array[i].lat = Number(array[i].lat); //clean data
 		array[i].long = Number(array[i].long); 
-		if(array[i].savings > m){ //get max savings value
-			m = array[i].savings;
+		if(array[i].savings > max){ //get max savings value
+			max = array[i].savings;
+		}
+		if(array[i].savings < min){ //get min savings value
+			min = array[i].savings;
 		}
 	}
 	info = {
-		max: m,
+		max: max,
 		data: array
 	};
+	max = Math.round(max / 10) * 10;
+	min = Math.round(min / 10) * 10;
+	$('#slider').attr('max',max); //round numbers for slider values
+	$('#slider').attr('min',min);
+	$('#minLabel').html('$'+min); //set slider labels
+	$('#maxLabel').html('$'+max);
+
 	var mapInfo = avgCoords(array); //get object here and use it to zet zoom / location of MAP api
 	var center = new google.maps.LatLng(mapInfo.latAvg,mapInfo.lonAvg);
 	map.setCenter(center);
 	var zoom = getZoom(mapInfo);
 	map.setZoom(zoom);
 	heatmap.setData(info);
+	updateSlider();
 
 }
 
@@ -88,7 +100,6 @@ function initCanvas() {
 	var c = document.getElementById("gradient");
 	var ctx = c.getContext("2d");
 	var ht = .6 * $(window).height();
-	console.log(ht);
 	var grd=ctx.createLinearGradient(0,0,30,60);
 	grd.addColorStop(0,"red");
 	grd.addColorStop(.25,"orange");

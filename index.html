@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzngPClA-xOQCUvW3Kc1OWLKFvR4i9h5w"></script>
 	<script type="text/javascript" src="static/js/heatmap.min.js"></script>
 	<script type="text/javascript" src="static/js/heatmap.js"></script>
@@ -11,17 +11,20 @@
 <body>
 
 	<form>
-	<h4>Upload a geographic potential savings .CSV file here:</h4>
+		<h4>Upload a geographic potential savings .CSV file here:</h4>
 		<input type="file" id="fileInput" onchange="handleFile();"/>
 	</form>
-	<div class="container">
-	<h2 id="title">Homes with energy savings potential</h2>
+	<h2 id="title"></h2>
 	<div id="map-canvas"></div>
-	<canvas id="gradient" width="30" height="60%" style="border:1px solid black;">
-Your browser does not support the HTML5 canvas tag.</canvas>
-	<input type="range" orient="vertical" id="slider" min="0" max="1000" step="10" onchange="updateSlider()" oninput="updateSlider()">
-	</div>
-</body>
-</html>
+
+	<div class ="wrapper">
+		<canvas id="gradient" width="30" height="60%" style="border:1px solid black;">
+			Your browser does not support the HTML5 canvas tag.</canvas>
+			<span id="minLabel"></span>
+			<input type="range" orient="vertical" id="slider" min="0" max="1000" step="10" onchange="updateSlider()" oninput="updateSlider()">
+			<span id="maxLabel"></span>
+		</div>
+	</body>
+	</html>
 
 

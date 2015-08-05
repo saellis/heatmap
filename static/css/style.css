@@ -17,6 +17,18 @@
  	margin-left: 3%;
  }
 
+ .wrapper {
+ 	position: relative;
+ }
+ .wrapper span {
+ 	position: absolute;
+ 	left: 71.5%;
+ 	top: -5%;
+ }
+ .wrapper #minLabel {
+ 	top: 100%;
+ }
+
 #gradient {
 	height: 58%;
 	width: 30px;
