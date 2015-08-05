@@ -39,7 +39,7 @@ function handleFile() {
 /* update heatmap with new file upload */
 function updateMap(array){
 	var max = 0;
-	var min = 1000000;
+	var min = Number.POSITIVE_INFINITY; //no one can save this much!
 	for(var i = 0; i < array.length; i ++){
 		array[i].savings = Number(array[i].savings.replace(/[^0-9\.]+/g,"")); //clean monetary values
 		array[i].lat = Number(array[i].lat); //clean data
@@ -69,6 +69,7 @@ function updateMap(array){
 	map.setZoom(zoom);
 	heatmap.setData(info);
 	updateSlider();
+	$('#slider').attr('disabled',false);
 
 }
 
@@ -95,9 +96,9 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-/* fill canvas color canvas-gradie nt*/
+/* fill canvas color canvas-gradient*/
 function initCanvas() {
-	var c = document.getElementById("canvas-gradient");
+	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
 	var ht = .6 * $(window).height();
 	var grd=ctx.createLinearGradient(0,0,30,60);

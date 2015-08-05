@@ -10,24 +10,22 @@
 </head>
 <body>
 
-	<form>
+	<form id="fileUpload">
 		<h4>Upload a geographic potential savings .CSV file here:</h4>
 		<input type="file" id="fileInput" onchange="handleFile();"/>
 	</form>
 	<h2 id="title"></h2>
 	<div id="map-canvas"></div>
-
-
-	<div id="side-wrapper">
-		<canvas id="canvas-gradient" width="30" height="60%">
+	
+		<canvas id="canvas" width="30" height="59%">
 			Your browser does not support the HTML5 canvas tag.</canvas>
-			<span id="minLabel"></span>
-			<input type="range" orient="vertical" id="slider" min="0" max="1000" step="10" onchange="updateSlider()" oninput="updateSlider()">
-			<span id="maxLabel"></span>
-	</div> 
-
-
+			
+	<div id ="side">
+		<span id="maxLabel"></span>
+		<span id="minLabel"></span>
+		<input type="range" orient="vertical" id="slider" disabled="true" min="0" max="1000" step="10" onchange="updateSlider()" oninput="updateSlider()">
+	</div>
 	</body>
-	</html>
+</html>
 
 
