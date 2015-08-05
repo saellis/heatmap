@@ -1,14 +1,33 @@
-var testData = {
-  max: 8,
-  data: [{lat: 24.6408, lng:46.7728, count: 3},{lat: 50.75, lng:-1.55, count: 1}]
-};
-	
+var heatmap;
+var map;
+var minSavings = 0;
+var info;
+
+/* update map values on slider change*/
+function updateSlider() {
+	if(typeof info !== 'undefined') { //if file has not been uploaded yet
+		var val = $("#slider").val();
+		$('#title').html("Homes with energy savings potential greater than $"+val);
+		var newInfo = {
+			max: info.max,
+			data: []
+		};
+		for(var i = 0; i < info.data.length; i ++){
+			if(info.data[i].savings > val){
+				newInfo.data.push(info.data[i]);
+			}
+		}
+		heatmap.setData(newInfo);
+	}
+}
+
+/* get new file from upload, update map */
 function handleFile() {
 	var file = document.getElementById("fileInput").files[0];
 	var reader = new FileReader();
 
 	reader.onload = function(e) {
-		var text = reader.result;
+		var text = $.trim(reader.result);
 		var arr = Papa.parse(text,{
 			'header':true
 		}); //CSV Parser
@@ -17,43 +36,103 @@ function handleFile() {
 	reader.readAsText(file);
 }
 
+/* update heatmap with new file upload */
 function updateMap(array){
-	console.log(array);
-	for(var row in array){
-		console.log(row["title"]);
+	var m = 0;
+	for(var i = 0; i < array.length; i ++){
+		array[i].savings = Number(array[i].savings.replace(/[^0-9\.]+/g,"")); //clean monetary values
+		array[i].lat = Number(array[i].lat); //clean data
+		array[i].long = Number(array[i].long); 
+		if(array[i].savings > m){ //get max savings value
+			m = array[i].savings;
+		}
 	}
+	info = {
+		max: m,
+		data: array
+	};
+	var mapInfo = avgCoords(array); //get object here and use it to zet zoom / location of MAP api
+	var center = new google.maps.LatLng(mapInfo.latAvg,mapInfo.lonAvg);
+	map.setCenter(center);
+	var zoom = getZoom(mapInfo);
+	map.setZoom(zoom);
+	heatmap.setData(info);
+
 }
 
+/* initialize map & heatmap */
 function initialize() {
-	var myLatlng = new google.maps.LatLng(40.4397, -79.9764);
-	// map options,
-	var myOptions = {
-	  zoom: 11,
-	  center: myLatlng
+	var options = {
+		zoom: 3,
+		center: new google.maps.LatLng(40,-100)
 	};
-	// standard map
-	map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-	// heatmap layer
+	map = new google.maps.Map(document.getElementById("map-canvas"), options);
 	heatmap = new HeatmapOverlay(map, 
-	  {
-		// radius should be small ONLY if scaleRadius is true (or small radius is intended)
-		"radius": 2,
-		"maxOpacity": 1, 
-		// scales the radius based on map zoom
-		"scaleRadius": true, 
-		// if set to false the heatmap uses the global maximum for colorization
-		// if activated: uses the data maximum within the current map boundaries 
-		//   (there will always be a red spot with useLocalExtremas true)
+	{
+		"radius": 20,
+		"maxOpacity": 1,
+		"scaleRadius": false, 
 		"useLocalExtrema": true,
-		// which field name in your data represents the latitude - default "lat"
 		latField: 'lat',
-		// which field name in your data represents the longitude - default "lng"
-		lngField: 'lng',
-		// which field name in your data represents the data value - default "value"
-		valueField: 'count'
-	  }
+		lngField: 'long',
+		valueField: 'savings'
+	}
 	);
-		heatmap.setData(testData);
+	initCanvas();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+/* fill canvas color gradient */
+function initCanvas() {
+	var c = document.getElementById("gradient");
+	var ctx = c.getContext("2d");
+	var ht = .6 * $(window).height();
+	console.log(ht);
+	var grd=ctx.createLinearGradient(0,0,30,60);
+	grd.addColorStop(0,"red");
+	grd.addColorStop(.25,"orange");
+	grd.addColorStop(.5,"yellow");
+	grd.addColorStop(.75,"green");
+	grd.addColorStop(1,"blue");
+
+	ctx.fillStyle=grd;
+	ctx.fillRect(0,0,30,60);
+}
+
+/* returns average of coordinates as [avg_lattitude,avg_longitude] */
+function avgCoords(data) {
+	var lat = 0;
+	var lon = 0;
+	var latMin = 500;
+	var latMax = 0;
+	var lonMin = 500;
+	var lonMax = 0;
+	for(var i = 0; i < data.length; i ++) {
+		lat += data[i].lat;
+		lon += data[i].long;
+		if(data[i].lat < latMin) latMin = data[i].lat;
+		if(data[i].lat > latMax) latMax = data[i].lat;
+		if(data[i].long < lonMin) lonMin = data[i].long;
+		if(data[i].long > lonMax) lonMax = data[i].long;
+	}
+	var lo= lon*1.0/data.length;
+	var la = lat*1.0/data.length;
+	var latRange = latMax - latMin;
+	var lonRange = lonMax - lonMin;
+	var res = {
+		latAvg: la,
+		lonAvg: lo,
+		latRng: latRange,
+		lonRng: lonRange
+	}
+	return res;
+}
+
+function getZoom(info) {
+	return parseInt(((info.latRng + info.lonRng)/2)/15 + 9,10);
+}
+
+
+
+

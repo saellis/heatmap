@@ -1,19 +1,27 @@
 <html>
 <head>
-<script type="text/javascript" src="jquery.min.js"></script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzngPClA-xOQCUvW3Kc1OWLKFvR4i9h5w"></script>
-<script type="text/javascript" src="heatmap.min.js"></script>
-<script type="text/javascript" src="heatmap.js"></script>
-<script type="text/javascript" src="papaparse.min.js"></script>
-<script type="text/javascript" src="main.js"></script>
-<link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzngPClA-xOQCUvW3Kc1OWLKFvR4i9h5w"></script>
+	<script type="text/javascript" src="static/js/heatmap.min.js"></script>
+	<script type="text/javascript" src="static/js/heatmap.js"></script>
+	<script type="text/javascript" src="static/js/papaparse.min.js"></script>
+	<script type="text/javascript" src="static/js/main.js"></script>
+	<link rel="stylesheet" href="static/css/style.css">
 </head>
-  <body>
-  <form>
-  <input type="file" id="fileInput" onchange="handleFile();"/>
-  </form>
+<body>
+
+	<form>
+	<h4>Upload a geographic potential savings .CSV file here:</h4>
+		<input type="file" id="fileInput" onchange="handleFile();"/>
+	</form>
+	<div class="container">
+	<h2 id="title">Homes with energy savings potential</h2>
 	<div id="map-canvas"></div>
-  </body>
+	<canvas id="gradient" width="30" height="60%" style="border:1px solid black;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+	<input type="range" orient="vertical" id="slider" min="0" max="1000" step="10" onchange="updateSlider()" oninput="updateSlider()">
+	</div>
+</body>
 </html>
 
 
