@@ -95,9 +95,9 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-/* fill canvas color gradient */
+/* fill canvas color canvas-gradie nt*/
 function initCanvas() {
-	var c = document.getElementById("gradient");
+	var c = document.getElementById("canvas-gradient");
 	var ctx = c.getContext("2d");
 	var ht = .6 * $(window).height();
 	var grd=ctx.createLinearGradient(0,0,30,60);

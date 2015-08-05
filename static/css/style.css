@@ -5,6 +5,7 @@
 	margin-bottom: 10%;
 	border: 3px solid #303030;
 	float: left;
+  position:relative;
  }
  #title {
   	margin-left: 15%;
@@ -17,19 +18,20 @@
  	margin-left: 3%;
  }
 
- .wrapper {
- 	position: relative;
+ #side-wrapper {
+ 	left: 85%;
  }
- .wrapper span {
+ #side-wrapper #minLabel {
+  top: 74%;
+ }
+ 
+ #side-wrapper span {
  	position: absolute;
  	left: 71.5%;
- 	top: -5%;
- }
- .wrapper #minLabel {
- 	top: 100%;
+ 	top: 13%;
  }
 
-#gradient {
+#canvas-gradient {
 	height: 58%;
 	width: 30px;
 	margin-left:1%;
