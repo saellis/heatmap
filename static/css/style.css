@@ -32,12 +32,13 @@
 	left: 55px;
 }
 #minLabel, #maxLabel {
+	font-family: verdana;
 	position:absolute;
-	bottom:-23px;
+	bottom:-10%;
 	right: 30px;
 }
 #maxLabel {
-	top: -20px;
+	top: -10%;
 }
 
 input[type=range][orient=vertical] {
